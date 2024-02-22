@@ -1,34 +1,32 @@
 name: deploy-container
 
-on: 
+on:
   push:
     branches:
       - master
-    paths: 
+    paths:
       - 'container/**'
 
-defaults: 
+defaults:
   run:
     working-directory: container
 
-jobs: 
-  build: 
+jobs:
+  build:
     runs-on: ubuntu-latest
-    steps: 
+    steps:
       - uses: actions/checkout@v2
       - run: npm install
       - run: npm run build
 
-      # Log secret values
-      - name: Log AWS credentials
+      - name: Print AWS secrets
         run: |
-          echo "logging AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}"
-          echo "logging AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}"
-          echo "logging AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}"
-      
-      - uses: chrislennon/action-aws-cli@v1.2 
-      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest
+          echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
+          echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
+
+      - uses: chrislennon/action-aws-cli@v1.2
+      - run: aws s3 sync container/dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest --debug
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_DEFAULT_REGION: eu-north-1
+          AWS_DEFAULT_REGION: us-east-1
