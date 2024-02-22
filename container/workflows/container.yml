@@ -11,28 +11,21 @@ defaults:
   run:
     working-directory: container
 
-# Print AWS secrets before running the jobs
-jobs:
-  print-secrets:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Print AWS secrets
-        run: |
-          echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
-          echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
-
-# Define the main build job
 jobs:
   build:
     runs-on: ubuntu-latest
-    needs: print-secrets # Ensure the print-secrets job runs before build job
     steps:
       - uses: actions/checkout@v2
       - run: npm install
       - run: npm run build
 
+      - name: Print AWS secrets
+        run: |
+          echo "AWS_ACCESS_KEY_ID: $AWS_ACCESS_KEY_ID"
+          echo "AWS_SECRET_ACCESS_KEY: $AWS_SECRET_ACCESS_KEY"
+
       - uses: chrislennon/action-aws-cli@v1.2
-      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest --debug
+      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_BUCKET_NAME }}/container/latest 
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
           AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
