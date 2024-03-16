@@ -1,11 +1,14 @@
 
 import React from 'react'
 import MarketingApp from './components/marketingApp'
-
+import Header from './components/Header'
+import {BrowserRouter} from 'react-router-dom'
 export default ()=>{
-    return  <div>
-        <h1 >Container is running !!!!!</h1>
-        <hr/>
+    return  <BrowserRouter>  <div>
+       
+        <Header/>
+     
         <MarketingApp/>
     </div>
+    </BrowserRouter>
 }
