@@ -1,7 +1,8 @@
 import {mount} from 'auth/AuthApp'
 import React, {useRef, useEffect} from 'react'
 import {useHistory} from 'react-router-dom'
-export default ()=> {
+
+export default ({onSignIn})=> {
     const history = useHistory()
     const ref = useRef(null);
     useEffect(()=>{
@@ -15,7 +16,11 @@ export default ()=> {
                 }
                
             },
-            initialPath: history.location.pathname
+            initialPath: history.location.pathname,
+            onSignIn: ()=>{
+                console.log('sign in clicked')
+               onSignIn()
+            }
         }, );
 
         history.listen(onParentNavigate)
