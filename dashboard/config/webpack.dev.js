@@ -19,6 +19,7 @@ const devConfig = {
     },
   },
   plugins: [
+    
     new ModuleFederationPlugin({
       name: 'dashboard',
       filename: 'remoteEntry.js',
