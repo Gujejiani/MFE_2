@@ -7,12 +7,12 @@ import {BrowserRouter, Route, Switch} from 'react-router-dom'
 
 import { StylesProvider, createGenerateClassName } from '@material-ui/core'
 import Progress from './components/Progres'
-
 const generateClassName = createGenerateClassName({ 
     productionPrefix: 'co'
   });
   const MarketingLazy = lazy(()=> import('./components/marketingApp'))
   const AuthLazy = lazy(()=> import('./components/AuthApp'))
+  const LazyDashboard = lazy(()=> import('./components/DashboardApp'))
 export default ()=>{
 
     const [isSignedIn, setIsSignedIn] = React.useState(false)
@@ -26,6 +26,9 @@ export default ()=>{
         <Switch>
             <Route path='/auth' >
                 <AuthLazy onSignIn={()=>setIsSignedIn(true)} />
+            </Route>
+            <Route path='/dashboard' >
+                <LazyDashboard />
             </Route>
             <Route path='/' >
                 <MarketingLazy />
